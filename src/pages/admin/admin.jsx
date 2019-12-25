@@ -30,7 +30,7 @@ export default class Admin extends Component {
                 <Sider>
                     <LeftNav />
                 </Sider>
-                <Layout>
+                <Layout style={{minWidth:760}}>
                     <Header>Header</Header>
                     <Content style={{ margin: 20, backgroundColor: '#fff' }}>
                         <Switch>

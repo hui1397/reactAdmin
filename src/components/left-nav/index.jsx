@@ -56,14 +56,11 @@ class LeftNav extends Component {
                 ))
             } else {
                 // 查找改子模块是否有与当前路由匹配的key
-                const cItem = item.children.find(cItem => cItem.key === path)
+                const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
                 // 如果存在，说明当前item的子列表需要打开
-                if(cItem){
+                if (cItem) {
                     this.openKey = item.key
                 }
-                
-
-
                 pre.push((
                     <SubMenu
                         key={item.key}
@@ -84,12 +81,33 @@ class LeftNav extends Component {
     }
 
     // 为第一次render()装备数据(必须同步)
-    componentWillMount(){
+    componentWillMount() {
         this.menuNodes = this.getMenuNodes(menuList)
+    }
+
+    initPath = (menuList) => {
+        let path = this.props.location.pathname
+        for (let i = 0; i < menuList.length; i++) {
+            if (!menuList[i].children) {
+                if(path.indexOf(menuList[i].key) === 0){
+                    return menuList[i].key
+                }
+            } else {
+                const cItem = menuList[i].children.find(cItem => path.indexOf(cItem.key) === 0)
+                return cItem.key
+            }
+        }
+        return
     }
     render() {
         // 得到当前请求路由
         let path = this.props.location.pathname
+      
+        const result = this.initPath(menuList) // 当前请求的是商品或其子路由界面
+        if(result){
+            path = result
+        }
+
         return (
             <div className="left-nav">
                 <Link to='/' className="left-nav-header">
