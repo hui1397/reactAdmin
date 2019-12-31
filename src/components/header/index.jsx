@@ -40,7 +40,7 @@ class Header extends Component {
                 // 如果当前item对象的key与path一样，item的title就是需要显示的key
                 title = item.title
             } else if (item.children) {
-                const cItem = item.children.find(cItem => cItem.key === path)
+                const cItem = item.children.find(cItem => path.indexOf( cItem.key) === 0)
                 // 如果有值才说明有匹配的
                 if (cItem) {
                     title = cItem.title
