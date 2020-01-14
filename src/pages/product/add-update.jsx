@@ -12,6 +12,7 @@ import LinkButton from '../../components/link-button'
 import { reqCategorys, reqAddOrUpdateProduct } from '../../api'
 import PicturesWall from './pictures-wall'
 import RichTextEditor from './rich-text-editor'
+import memoryUtils from "../../utils/memoryUtils";
 const { Item } = Form
 const { TextArea } = Input
 
@@ -52,7 +53,7 @@ class ProductAdUpdate extends Component {
 
         const product = { name, desc, price, imgs, detail, pCategoryId, categoryId }
         // 如果是更新,需要添加_id
-        if (this.isUpdata) {
+        if (this.isUpdate) {
           product._id = this.product._id
         }
 
@@ -157,18 +158,28 @@ class ProductAdUpdate extends Component {
     this.getCategorys('0')
   }
 
-  componentWillMount() {
+  // componentWillMount() {
+  //   // 取出携带的state
+  //   const product = this.props.location.state //如果是添加则没值
+  //   this.isUpdate = !!product  // 保存一个是否是更新的标识
+  //   this.product = product || {} //保存商品初始值 指定{}防止报错
+  // }
+  componentWillMount () {
     // 取出携带的state
-    const product = this.props.location.state //如果是添加则没值
-    this.isUpdata = !!product  // 保存一个是否是更新的标识
-    this.product = product || {} //保存商品初始值 指定{}防止报错
+    const product = memoryUtils.product  // 如果是添加没值, 否则有值
+    console.log(product)
+    // 保存是否是更新的标识
+    this.isUpdate = !!product._id
+    // 保存商品(如果没有, 保存是{})
+    this.product = product || {}
   }
 
   render() {
-    const { isUpdata, product } = this
+    const { isUpdate, product } = this
+    console.log(isUpdate)
     const { pCategoryId, categoryId, imgs, detail } = product
     const categoryIds = [] //结束级联分类id的数组
-    if (isUpdata) {
+    if (isUpdate) {
       if (pCategoryId === '0') {
         categoryIds.push(categoryId)
       } else {
@@ -187,7 +198,7 @@ class ProductAdUpdate extends Component {
       <span>
         <LinkButton onClick={() => this.props.history.goBack()}>
           <Icon type="arrow-left" ></Icon>
-          <span>{isUpdata ? '修改商品' : '添加商品'}</span>
+          <span>{isUpdate ? '修改商品' : '添加商品'}</span>
         </LinkButton>
       </span>
     )

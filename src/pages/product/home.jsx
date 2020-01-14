@@ -11,6 +11,7 @@ import {
 import LinkButton from '../../components/link-button'
 import { reqProducts, reqSearchProducts, reqUpdateStatus } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
+import memoryUtils from "../../utils/memoryUtils";
 
 const Option = Select.Option
 
@@ -57,8 +58,8 @@ export default class ProductHome extends Component {
                 dataIndex: '',
                 render: (product) => (
                     <span>
-                        <LinkButton onClick={() => this.props.history.push('/product/detail', { product })}>详情</LinkButton>
-                        <LinkButton onClick={() => this.props.history.push('/product/addupdate', product)}>修改</LinkButton>
+                        <LinkButton onClick={() => this.showDetail(product)}>详情</LinkButton>
+                        <LinkButton onClick={() => this.showUpdate(product)}>修改</LinkButton>
                     </span>
                 )
             }
@@ -99,6 +100,24 @@ export default class ProductHome extends Component {
                 products: list
             })
         }
+    }
+
+    /*
+显示商品详情界面
+ */
+    showDetail = (procut) => {
+        // 缓存product对象 ==> 给detail组件使用
+        memoryUtils.product = procut
+        this.props.history.push('/product/detail')
+    }
+
+    /*
+    显示修改商品界面
+     */
+    showUpdate = (procut) => {
+        // 缓存product对象 ==> 给detail组件使用
+        memoryUtils.product = procut
+        this.props.history.push('/product/addupdate')
     }
 
     // 即将挂载
